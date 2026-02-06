@@ -1,0 +1,12 @@
+{
+	"recommendations": [
+		/* mandatory extensions */
+		"ms-vscode.cpptools",                   // C/C++ support
+		"ms-vscode.cmake-tools",                // cmake build buttons and syntax
+		"marus25.cortex-debug",                 // Cortex-Debug
+		/* handy extensions (optional) */
+		"EditorConfig.EditorConfig",            // editorconfig
+		"pkief.material-icon-theme",            // Icons
+		"mhutchie.git-graph",                   // Git Graph
+	]
+}
