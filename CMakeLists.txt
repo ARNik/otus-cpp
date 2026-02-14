@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.20)
 
 set(PATCH_VERSION "1" CACHE INTERNAL "Patch version")
 set(PROJECT_VERSION 0.0.${PATCH_VERSION})
@@ -34,37 +34,26 @@ if(WITH_BOOST_TEST)
         CXX_STANDARD_REQUIRED ON
     )
 
-    target_compile_definitions(test_version PRIVATE BOOST_TEST_DYN_LINK)
+    # target_compile_definitions(test_version PRIVATE BOOST_TEST_DYN_LINK)
 
     target_link_libraries(test_version
-        ${Boost_LIBRARIES}
+        PRIVATE
+        Boost::unit_test_framework
         helloworld
     )
 endif()
 
 if (MSVC)
-    target_compile_options(helloworld_cli PRIVATE
-        /W4
-    )
-    target_compile_options(helloworld PRIVATE
-        /W4
-    )
+    target_compile_options(helloworld_cli PRIVATE /W4)
+    target_compile_options(helloworld PRIVATE /W4)
     if(WITH_BOOST_TEST)
-        target_compile_options(test_version PRIVATE
-            /W4
-        )
+        target_compile_options(test_version PRIVATE /W4)
     endif()
 else ()
-    target_compile_options(helloworld_cli PRIVATE
-        -Wall -Wextra -pedantic -Werror
-    )
-    target_compile_options(helloworld PRIVATE
-        -Wall -Wextra -pedantic -Werror
-    )
+    target_compile_options(helloworld_cli PRIVATE -Wall -Wextra -pedantic -Werror)
+    target_compile_options(helloworld PRIVATE -Wall -Wextra -pedantic -Werror)
     if(WITH_BOOST_TEST)
-        target_compile_options(test_version PRIVATE
-            -Wall -Wextra -pedantic -Werror
-        )
+        target_compile_options(test_version PRIVATE -Wall -Wextra -pedantic -Werror)
     endif()
 endif()
 
