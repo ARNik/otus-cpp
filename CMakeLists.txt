@@ -1,16 +1,20 @@
 cmake_minimum_required(VERSION 3.20)
+project(helloworld)
 
-set(PATCH_VERSION "1" CACHE INTERNAL "Patch version")
-set(PROJECT_VERSION 0.0.${PATCH_VERSION})
-
-project(helloworld VERSION ${PROJECT_VERSION})
+set(VERSION_HEADER ${CMAKE_BINARY_DIR}/version.h)
+add_custom_target(
+    ALWAYS
+    COMMAND echo "#pragma once" > ${VERSION_HEADER}
+    COMMAND git describe --tags --always --dirty --abbrev=8 |
+            xargs printf "#define GIT_VERSION \"%s\"" >> ${VERSION_HEADER}
+    VERBATIM
+)
 
 option(WITH_BOOST_TEST "Whether to build Boost test" ON)
 
-configure_file(version.h.in version.h)
-
 add_executable(helloworld_cli main.cpp)
 add_library(helloworld lib.cpp)
+add_dependencies(helloworld ALWAYS)
 
 set_target_properties(helloworld_cli helloworld PROPERTIES
     CXX_STANDARD 14
@@ -60,10 +64,8 @@ endif()
 install(TARGETS helloworld_cli RUNTIME DESTINATION bin)
 
 set(CPACK_GENERATOR DEB)
-set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
-set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
-set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
-set(CPACK_PACKAGE_CONTACT example@example.com)
+set(CPACK_PACKAGE_VERSION "${GIT_VERSION}")
+set(CPACK_PACKAGE_CONTACT arnik@arnik.ru)
 include(CPack)
 
 if(WITH_BOOST_TEST)
