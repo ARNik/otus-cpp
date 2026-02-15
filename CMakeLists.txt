@@ -21,16 +21,27 @@ add_custom_target(
     VERBATIM
 )
 
-option(WITH_BOOST_TEST "Whether to build Boost test" ON)
-
 add_executable(helloworld_cli main.cpp)
 add_library(helloworld lib.cpp)
 add_dependencies(helloworld ALWAYS)
 
-set_target_properties(helloworld_cli helloworld PROPERTIES
-    CXX_STANDARD 14
-    CXX_STANDARD_REQUIRED ON
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+include(FetchContent)
+FetchContent_Declare(
+    googletest
+    URL https://github.com/google/googletest/archive/52eb8108c5bdec04579160ae17225d66034bd723.zip
+    DOWNLOAD_EXTRACT_TIMESTAMP true
 )
+
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
+
+# set_target_properties(helloworld_cli helloworld PROPERTIES
+#     CXX_STANDARD 17
+#     CXX_STANDARD_REQUIRED ON
+# )
 
 target_include_directories(helloworld
     PRIVATE "${CMAKE_BINARY_DIR}"
@@ -40,12 +51,14 @@ target_link_libraries(helloworld_cli PRIVATE
     helloworld
 )
 
+option(WITH_BOOST_TEST "Whether to build Boost test" ON)
+
 if(WITH_BOOST_TEST)
     find_package(Boost CONFIG COMPONENTS unit_test_framework REQUIRED)
     add_executable(test_version test_version.cpp)
 
     set_target_properties(test_version PROPERTIES
-        CXX_STANDARD 14
+        CXX_STANDARD 17
         CXX_STANDARD_REQUIRED ON
     )
 
@@ -83,3 +96,18 @@ if(WITH_BOOST_TEST)
     enable_testing()
     add_test(test_version test_version)
 endif()
+
+enable_testing()
+
+add_executable(
+  test_hello
+  test_hello.cpp
+)
+
+target_link_libraries(
+  test_hello
+  GTest::gtest_main
+)
+
+include(GoogleTest)
+gtest_discover_tests(test_hello)
