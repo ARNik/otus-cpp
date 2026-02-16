@@ -14,6 +14,14 @@ jobs:
           submodules: true
 
       # - run: sudo apt-get update && sudo apt-get install libboost-test-dev -y
+      - name: Check signature
+        run: |
+          echo "${{ secrets.GPG_PUB_KEY }}" | gpg --import
+          # gpg --list-keys
+          KEY_FPR=$(gpg --list-keys --with-colons | grep '^fpr' | head -1 | cut -d: -f10)
+          # echo "KEY_FPR: $KEY_FPR"
+          echo "$KEY_FPR:6:" | gpg --import-ownertrust
+          git verify-commit HEAD && echo "✅ Signature verified" || { echo "❌ Signature error" ; exit 1; }
 
       - run: cmake .
       - run: cmake --build .
