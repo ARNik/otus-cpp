@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Генерация версии пакета (при конфигурации)
 execute_process(
-	COMMAND git describe --tags --always --dirty --abbrev=8
+	COMMAND sh -c "git describe --tags --always --dirty --abbrev=8 | sed 's/-g/-/'"
 	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 	OUTPUT_VARIABLE PACKAGE_VERSION
 	OUTPUT_STRIP_TRAILING_WHITESPACE
@@ -19,7 +19,7 @@ set(VERSION_HEADER ${CMAKE_BINARY_DIR}/version.h)
 add_custom_target(
 	ALWAYS
 	COMMAND ${CMAKE_COMMAND} -E echo "#pragma once" > ${VERSION_HEADER}
-	COMMAND git describe --tags --always --dirty --abbrev=8 |
+	COMMAND git describe --tags --always --dirty --abbrev=8 | sed "s/-g/-/" |
 			xargs printf "#define GIT_VERSION \"%s\"" >> ${VERSION_HEADER}
 	VERBATIM
 )
