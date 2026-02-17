@@ -1,13 +1,17 @@
-#define BOOST_TEST_MODULE test_version
-
+#include <gtest/gtest.h>
 #include "lib.h"
 
-#include <boost/test/unit_test.hpp>
+// https://www.youtube.com/watch?v=aDQabfxQwfM
 
-BOOST_AUTO_TEST_SUITE(test_version)
-
-BOOST_AUTO_TEST_CASE(test_valid_version) {
-	BOOST_CHECK(std::string(version()).size() > 4);
+// Проверяем что версия определена и не пустая
+TEST(test_version, VersionDefined) {
+	const char* ver = version();
+	ASSERT_NE(ver, nullptr);
+	ASSERT_STRNE(ver, "");
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+// Проверяем размер строки версии
+TEST(test_version, VersionSize) {
+	EXPECT_GT(std::string(version()).size(), 4);
+}
+
