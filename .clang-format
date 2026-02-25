@@ -1,0 +1,32 @@
+#  https://clang.llvm.org/docs/ClangFormatStyleOptions.html
+
+# BasedOnStyle: LLVM
+Language: Cpp
+UseTab: Always                      # Всегда использовать табы для отступа
+IndentWidth: 4                      # Ширина табуляции
+TabWidth: 4                         # Ширина символа табуляции в пробелах
+
+DerivePointerAlignment: false       # Запрещаем автоматически вычислять выравнивание * и &
+PointerAlignment: Left              # Выравнивание * и &
+
+IndentAccessModifiers: false        # Сдвиг public/private/protected
+AccessModifierOffset: -4            # Сдвиг public/private/protected
+
+BreakBeforeBraces: Custom
+BraceWrapping:                      # Перенос скобок:
+  AfterCaseLabel: false             # для case:
+  AfterControlStatement: Never
+  AfterFunction: true               # для длинных функций
+  AfterClass: true                  # для классов
+  SplitEmptyFunction: true
+
+
+  # AfterControlStatement: Never
+  # AfterEnum: true
+  # AfterNamespace: false
+  # AfterStruct: true
+  # AfterUnion: true
+  # BeforeCatch: false
+  # BeforeElse: false
+  # IndentBraces: false
+  # SplitEmptyFunction: false

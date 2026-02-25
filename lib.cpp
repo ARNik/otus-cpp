@@ -2,6 +2,4 @@
 
 #include "version.h"
 
-const char* version() {
-	return GIT_VERSION;
-}
+const char* version() { return GIT_VERSION; }
