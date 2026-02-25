@@ -9,9 +9,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      # https://github.com/actions/checkout
+      - name: Checkout repository
+        uses: actions/checkout@v6
         with:
-          submodules: true
+          fetch-depth: 0
+          fetch-tags: true
+          submodules: false
 
       # - run: sudo apt-get update && sudo apt-get install libboost-test-dev -y
       - name: Check signature
