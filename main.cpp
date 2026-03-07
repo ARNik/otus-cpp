@@ -1,4 +1,7 @@
+#include <algorithm>
+#include <array>
 #include <cassert>
+#include <cstdint>
 #include <cstdlib>
 #include <iostream>
 #include <string>
@@ -41,6 +44,33 @@ int main(int argc, char const* argv[])
 		}
 
 		// TODO reverse lexicographically sort
+
+		// Convert ips to digits
+		std::vector<std::array<uint8_t, 4>> ip_num_vec;
+		for (auto& ip : ip_pool) {
+			std::array<uint8_t, 4> ip_num;
+			for (int i = 0; i < 4; ++i) {
+				ip_num.at(i) = std::stoi(ip.at(i));
+			}
+			ip_num_vec.push_back(ip_num);
+		}
+
+		// std::sort()
+
+		// Print ips from digits
+		for (auto& ip_num : ip_num_vec) {
+			bool dot = false;
+			for (auto& ip_part : ip_num) {
+				if (dot) {
+					std::cout << '.';
+				}
+				std::cout << std::to_string(ip_part);
+				dot = true;
+			}
+			std::cout << std::endl;
+		}
+
+		std::cout << "=======" << std::endl;
 
 		for (std::vector<std::vector<std::string>>::const_iterator ip =
 				 ip_pool.cbegin();
