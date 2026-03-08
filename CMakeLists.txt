@@ -28,7 +28,7 @@ add_custom_target(
 )
 
 # Основные таргеты
-add_executable(ip_filter main.cpp)
+add_executable(ip_filter main.cpp ip_pool.cpp)
 add_dependencies(ip_filter GITVERSION)
 target_include_directories(ip_filter PRIVATE "${CMAKE_BINARY_DIR}")
 

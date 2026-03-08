@@ -1,5 +1,3 @@
-#include <algorithm>
-#include <array>
 #include <cassert>
 #include <cstdint>
 #include <cstdlib>
@@ -7,84 +5,26 @@
 #include <string>
 #include <vector>
 
+#include "ip_pool.h"
+
 // https://otusmetodist.yonote.ru/share/2cb07ace-75b1-48fe-b6fd-259b39f6025a/doc/2-filtraciya-ip-adresov-s8zT8mUKCH
-
-// ("",  '.') -> [""]
-// ("11", '.') -> ["11"]
-// ("..", '.') -> ["", "", ""]
-// ("11.", '.') -> ["11", ""]
-// (".11", '.') -> ["", "11"]
-// ("11.22", '.') -> ["11", "22"]
-std::vector<std::string> split(const std::string& str, char d)
-{
-	std::vector<std::string> r;
-
-	std::string::size_type start = 0;
-	std::string::size_type stop = str.find_first_of(d);
-	while (stop != std::string::npos) {
-		r.push_back(str.substr(start, stop - start));
-
-		start = stop + 1;
-		stop = str.find_first_of(d, start);
-	}
-
-	r.push_back(str.substr(start));
-
-	return r;
-}
 
 int main(int argc, char const* argv[])
 {
 	try {
-		std::vector<std::vector<std::string>> ip_pool;
+		IP_Pool p;
 
 		for (std::string line; std::getline(std::cin, line);) {
-			std::vector<std::string> v = split(line, '\t');
-			ip_pool.push_back(split(v.at(0), '.'));
+			p.addIP(line);
 		}
 
 		// TODO reverse lexicographically sort
+		p.sort();
 
-		// Convert ips to digits
-		std::vector<std::array<uint8_t, 4>> ip_num_vec;
-		for (auto& ip : ip_pool) {
-			std::array<uint8_t, 4> ip_num;
-			for (int i = 0; i < 4; ++i) {
-				ip_num.at(i) = std::stoi(ip.at(i));
-			}
-			ip_num_vec.push_back(ip_num);
-		}
-
-		// std::sort()
-
-		// Print ips from digits
-		for (auto& ip_num : ip_num_vec) {
-			bool dot = false;
-			for (auto& ip_part : ip_num) {
-				if (dot) {
-					std::cout << '.';
-				}
-				std::cout << std::to_string(ip_part);
-				dot = true;
-			}
-			std::cout << std::endl;
-		}
+		p.print();
 
 		std::cout << "=======" << std::endl;
 
-		for (std::vector<std::vector<std::string>>::const_iterator ip =
-				 ip_pool.cbegin();
-			 ip != ip_pool.cend(); ++ip) {
-			for (std::vector<std::string>::const_iterator ip_part =
-					 ip->cbegin();
-				 ip_part != ip->cend(); ++ip_part) {
-				if (ip_part != ip->cbegin()) {
-					std::cout << ".";
-				}
-				std::cout << *ip_part;
-			}
-			std::cout << std::endl;
-		}
 
 		// 222.173.235.246
 		// 222.130.177.64
