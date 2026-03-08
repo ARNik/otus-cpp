@@ -53,7 +53,7 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-add_executable(tests tests.cpp)
+add_executable(tests tests.cpp ip_pool.cpp)
 add_dependencies(tests GITVERSION)
 target_include_directories(tests PRIVATE "${CMAKE_BINARY_DIR}")
 target_link_libraries(tests GTest::gtest_main)
