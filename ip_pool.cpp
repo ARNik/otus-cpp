@@ -1,17 +1,17 @@
 #include "ip_pool.h"
 #include <algorithm>
-#include <sstream>
 
 // === IP ===
 
 IP::IP(const std::string& ip_str)
 {
-	std::istringstream iss(ip_str);
-	std::string segment;
-	int i = 0;
+	size_t start = 0;
 
-	while (std::getline(iss, segment, '.') && i < 4) {
-		ip_num[i++] = static_cast<uint8_t>(std::stoi(segment));
+	for (int i = 0; i < 4; i++) {
+		size_t end = (i < 3) ? ip_str.find('.', start) : ip_str.length();
+		ip_num[i] =
+			static_cast<uint8_t>(std::stoi(ip_str.substr(start, end - start)));
+		start = end + 1;
 	}
 }
 
