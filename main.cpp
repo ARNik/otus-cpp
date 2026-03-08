@@ -16,10 +16,10 @@ int main(int argc, char const* argv[])
 
 		p.sort(); // reverse lexicographically sort for entire pool
 
-		p.print();				// print ip pool as is
-		p.print_filter(1);		// print 1.*.*.* IPs
-		p.print_filter(46, 70); // print 46.70.*.* IPs
-		p.print_filter_any(46); // print IPs if any byte is 46
+		p.print();				  // print ip pool as is
+		p.filter(1).print();	  // filter by first byte and output
+		p.filter(46, 70).print(); // filter by first and second bytes and output
+		p.filter_any(46).print(); // filter by any byte and output
 
 		// 222.173.235.246
 		// 222.130.177.64
