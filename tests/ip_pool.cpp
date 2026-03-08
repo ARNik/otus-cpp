@@ -1,23 +1,8 @@
-#include "version.h"
+#include "../src/ip_pool.h"
 #include <gtest/gtest.h>
 
 // https://www.youtube.com/watch?v=aDQabfxQwfM
 
-// Проверяем что версия определена и не пустая
-TEST(test_version, VersionDefined)
-{
-	const char* ver = GIT_VERSION;
-	ASSERT_NE(ver, nullptr);
-	ASSERT_STRNE(ver, "");
-}
-
-// Проверяем размер строки версии
-TEST(test_version, VersionSize)
-{
-	EXPECT_GT(std::string(GIT_VERSION).size(), 4);
-}
-
-#include "../src/ip_pool.h"
 TEST(test_ip, CreateFromString)
 {
 	std::string ip_str = "192.168.0.1";

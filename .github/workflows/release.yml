@@ -27,13 +27,14 @@ jobs:
           echo "$KEY_FPR:6:" | gpg --import-ownertrust
           git verify-commit HEAD && echo "✅ Signature verified" || { echo "❌ Signature error" ; exit 1; }
 
-      - run: cmake .
-      - run: cmake --build .
-      - run: cmake --build . --target test
-      - run: cmake --build . --target package
+      - run: mkdir -p build
+      - run: cmake -B build -S .
+      - run: cmake --build build
+      - run: cmake --build build --target test
+      - run: cmake --build build --target package
       - name: Show deb packages
         run: |
-          find . -maxdepth 1 -name "*.deb" -exec sh -c '
+          find build -maxdepth 1 -name "*.deb" -exec sh -c '
           echo "===== {} ====="
           dpkg-deb -I {}
           dpkg-deb -c {}
@@ -44,7 +45,7 @@ jobs:
         with:
           name: Release ${{ github.ref_name }}
           body:
-          files: ./*.deb
+          files: build/*.deb
           draft: false
           prerelease: false
           generate_release_notes: true
