@@ -16,10 +16,14 @@ int main(int argc, char const* argv[])
 
 		p.sort(); // reverse lexicographically sort for entire pool
 
-		p.print();				  // print ip pool as is
-		p.filter(1).print();	  // filter by first byte and output
-		p.filter(46, 70).print(); // filter by first and second bytes and output
-		p.filter_any(46).print(); // filter by any byte and output
+		// print ip pool as is
+		std::cout << p.get_as_string();
+		// filter by first byte and output
+		std::cout << p.filter(1).get_as_string();
+		// filter by first and second  bytes and output
+		std::cout << p.filter(46, 70).get_as_string();
+		// filter by any byte and output
+		std::cout << p.filter_any(46).get_as_string();
 
 		// 222.173.235.246
 		// 222.130.177.64

@@ -1,6 +1,5 @@
 #include "ip_pool.h"
 #include <algorithm>
-#include <iostream>
 #include <sstream>
 
 // === IP ===
@@ -16,6 +15,12 @@ IP::IP(const std::string& ip_str)
 	}
 }
 
+std::string IP::get_as_string() const
+{
+	return std::to_string(ip_num[0]) + "." + std::to_string(ip_num[1]) + "." +
+		   std::to_string(ip_num[2]) + "." + std::to_string(ip_num[3]);
+}
+
 uint32_t IP::get_as_uint32() const
 {
 	return (static_cast<uint32_t>(ip_num[0]) << 24) |
@@ -24,17 +29,18 @@ uint32_t IP::get_as_uint32() const
 		   static_cast<uint32_t>(ip_num[3]);
 }
 
-void IP::print() const
-{
-	std::cout << static_cast<int>(ip_num[0]) << '.'
-			  << static_cast<int>(ip_num[1]) << '.'
-			  << static_cast<int>(ip_num[2]) << '.'
-			  << static_cast<int>(ip_num[3]) << std::endl;
-}
-
 // === IP_Pool ===
 
 void IP_Pool::addIP(const std::string& ip_str) { ip_pool.push_back(ip_str); }
+
+std::string IP_Pool::get_as_string() const
+{
+	std::string res;
+	for (auto& ip : ip_pool) {
+		res.append(ip.get_as_string() + '\n');
+	}
+	return res;
+}
 
 void IP_Pool::sort()
 {
@@ -73,10 +79,3 @@ IP_Pool IP_Pool::filter_any(uint8_t part) const
 	}
 	return res;
 };
-
-void IP_Pool::print() const
-{
-	for (auto& ip : ip_pool) {
-		ip.print();
-	}
-}
