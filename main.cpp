@@ -1,9 +1,5 @@
-#include <cassert>
-#include <cstdint>
-#include <cstdlib>
 #include <iostream>
 #include <string>
-#include <vector>
 
 #include "ip_pool.h"
 
@@ -18,13 +14,12 @@ int main(int argc, char const* argv[])
 			p.addIP(line);
 		}
 
-		// TODO reverse lexicographically sort
-		p.sort();
+		p.sort(); // reverse lexicographically sort for entire pool
 
-		p.print();
-
-		std::cout << "=======" << std::endl;
-
+		p.print();				// print ip pool as is
+		p.print_filter(1);		// print 1.*.*.* IPs
+		p.print_filter(46, 70); // print 46.70.*.* IPs
+		p.print_filter_any(46); // print IPs if any byte is 46
 
 		// 222.173.235.246
 		// 222.130.177.64

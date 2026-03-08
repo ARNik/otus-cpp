@@ -31,15 +31,39 @@ std::ostream& operator<<(std::ostream& os, const IP& ip)
 }
 
 void IP_Pool::addIP(const std::string& ip_str) { ip_pool.push_back(ip_str); }
+
 void IP_Pool::sort()
 {
 	std::sort(ip_pool.begin(), ip_pool.end(), [](const auto& a, const auto& b) {
 		return a.get_as_uint32() > b.get_as_uint32();
 	});
 }
+
 void IP_Pool::print()
 {
 	for (auto& ip : ip_pool) {
 		std::cout << ip << std::endl;
 	}
 }
+
+void IP_Pool::print_filter(uint8_t part)
+{
+	for (auto& ip : ip_pool) {
+		if (ip.ip_num[0] == part)
+			std::cout << ip << std::endl;
+	}
+};
+
+void IP_Pool::print_filter(uint8_t part1, uint8_t part2) {
+	for (auto& ip : ip_pool) {
+		if ((ip.ip_num[0] == part1) && (ip.ip_num[1] == part2))
+			std::cout << ip << std::endl;
+	}
+};
+
+void IP_Pool::print_filter_any(uint8_t part) {
+	for (auto& ip : ip_pool) {
+		if ((ip.ip_num[0] == part) || (ip.ip_num[1] == part) || (ip.ip_num[2] == part) || (ip.ip_num[3] == part))
+			std::cout << ip << std::endl;
+	}
+};

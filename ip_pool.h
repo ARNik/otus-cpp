@@ -7,6 +7,7 @@
 
 struct IP {
 	IP(const std::string& ip_str);
+
 	uint32_t get_as_uint32() const;
 
 	std::array<uint8_t, 4> ip_num;
@@ -18,8 +19,14 @@ class IP_Pool
 {
 public:
 	void addIP(const std::string& ip_str);
+
 	void sort();
+
 	void print();
+
+	void print_filter(uint8_t part);
+	void print_filter(uint8_t part1, uint8_t part2);
+	void print_filter_any(uint8_t part);
 
 private:
 	std::vector<IP> ip_pool;
