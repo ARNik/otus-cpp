@@ -53,13 +53,13 @@ int main(int argc, char const* argv[])
 		p.sort(); // reverse lexicographically sort for entire pool
 
 		// print ip pool as is
-		std::cout << p.get_as_string();
+		std::cout << p;
 		// filter by first byte and output
-		std::cout << p.filter(1).get_as_string();
+		std::cout << p.filter(1);
 		// filter by first and second  bytes and output
-		std::cout << p.filter(46, 70).get_as_string();
+		std::cout << p.filter(46, 70);
 		// filter by any byte and output
-		std::cout << p.filter_any(46).get_as_string();
+		std::cout << p.filter_any(46);
 
 		// 222.173.235.246
 		// 222.130.177.64

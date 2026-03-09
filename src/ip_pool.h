@@ -14,6 +14,8 @@ struct IP {
 	std::array<uint8_t, 4> ip_num;
 };
 
+std::ostream& operator<<(std::ostream& os, const IP& ip);
+
 class IP_Pool
 {
 public:
@@ -30,3 +32,5 @@ public:
 private:
 	std::vector<IP> ip_pool;
 };
+
+std::ostream& operator<<(std::ostream& os, const IP_Pool& ip);
