@@ -1,5 +1,6 @@
 #include "ip_pool.h"
 #include <algorithm>
+#include <stdexcept>
 
 // === IP ===
 
@@ -7,10 +8,15 @@ IP::IP(const std::string& ip_str)
 {
 	size_t start = 0;
 
+	if (ip_str.length() < 6)
+		throw std::invalid_argument("IP error: the string is too short");
+
 	for (int i = 0; i < 4; i++) {
 		size_t end = (i < 3) ? ip_str.find('.', start) : ip_str.length();
-		ip_num[i] =
-			static_cast<uint8_t>(std::stoi(ip_str.substr(start, end - start)));
+		int octet = std::stoi(ip_str.substr(start, end - start));
+		if (octet < 0 || octet > 255)
+			throw std::invalid_argument("IP error: octet is not in 0..255 range");
+		ip_num[i] = static_cast<uint8_t>(octet);
 		start = end + 1;
 	}
 }
@@ -34,7 +40,6 @@ std::ostream& operator<<(std::ostream& os, const IP& ip)
 	os << ip.get_as_string();
 	return os;
 }
-
 
 // === IP_Pool ===
 
@@ -61,7 +66,7 @@ IP_Pool IP_Pool::filter(uint8_t part) const
 	IP_Pool res;
 	for (auto& ip : ip_pool) {
 		if (ip.ip_num[0] == part)
-		res.ip_pool.push_back(ip);
+			res.ip_pool.push_back(ip);
 	}
 	return res;
 }
@@ -71,7 +76,7 @@ IP_Pool IP_Pool::filter(uint8_t part1, uint8_t part2) const
 	IP_Pool res;
 	for (auto& ip : ip_pool) {
 		if ((ip.ip_num[0] == part1) && (ip.ip_num[1] == part2))
-		res.ip_pool.push_back(ip);
+			res.ip_pool.push_back(ip);
 	}
 	return res;
 };
@@ -81,8 +86,8 @@ IP_Pool IP_Pool::filter_any(uint8_t part) const
 	IP_Pool res;
 	for (auto& ip : ip_pool) {
 		if ((ip.ip_num[0] == part) || (ip.ip_num[1] == part) ||
-		(ip.ip_num[2] == part) || (ip.ip_num[3] == part))
-		res.ip_pool.push_back(ip);
+			(ip.ip_num[2] == part) || (ip.ip_num[3] == part))
+			res.ip_pool.push_back(ip);
 	}
 	return res;
 };
