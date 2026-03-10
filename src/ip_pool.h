@@ -3,7 +3,6 @@
 #include <cstdint>
 #include <string>
 #include <vector>
-#include <functional>
 
 struct IP {
 	IP(const std::string& ip_str);
@@ -25,8 +24,6 @@ public:
 	std::string get_as_string() const;
 
 	void sort();
-
-	IP_Pool filter(std::function<bool(const IP&)> predicate) const;
 
 	IP_Pool filter(uint8_t part) const;
 	IP_Pool filter(uint8_t part1, uint8_t part2) const;

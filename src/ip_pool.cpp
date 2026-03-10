@@ -15,8 +15,7 @@ IP::IP(const std::string& ip_str)
 		size_t end = (i < 3) ? ip_str.find('.', start) : ip_str.length();
 		int octet = std::stoi(ip_str.substr(start, end - start));
 		if (octet < 0 || octet > 255)
-			throw std::invalid_argument(
-				"IP error: octet is not in 0..255 range");
+			throw std::invalid_argument("IP error: octet is not in 0..255 range");
 		ip_num[i] = static_cast<uint8_t>(octet);
 		start = end + 1;
 	}
@@ -62,34 +61,35 @@ void IP_Pool::sort()
 	});
 }
 
-IP_Pool IP_Pool::filter(std::function<bool(const IP&)> predicate) const
+IP_Pool IP_Pool::filter(uint8_t part) const
 {
 	IP_Pool res;
 	for (auto& ip : ip_pool) {
-		if (predicate(ip))
+		if (ip.ip_num[0] == part)
 			res.ip_pool.push_back(ip);
 	}
 	return res;
 }
 
-IP_Pool IP_Pool::filter(uint8_t part) const
-{
-	return filter([part](const IP& ip) { return ip.ip_num[0] == part; });
-}
-
 IP_Pool IP_Pool::filter(uint8_t part1, uint8_t part2) const
 {
-	return filter([part1, part2](const IP& ip) {
-		return ip.ip_num[0] == part1 && ip.ip_num[1] == part2;
-	});
+	IP_Pool res;
+	for (auto& ip : ip_pool) {
+		if ((ip.ip_num[0] == part1) && (ip.ip_num[1] == part2))
+			res.ip_pool.push_back(ip);
+	}
+	return res;
 };
 
 IP_Pool IP_Pool::filter_any(uint8_t part) const
 {
-	return filter([part](const IP& ip) {
-		return (ip.ip_num[0] == part) || (ip.ip_num[1] == part) ||
-			   (ip.ip_num[2] == part) || (ip.ip_num[3] == part);
-	});
+	IP_Pool res;
+	for (auto& ip : ip_pool) {
+		if ((ip.ip_num[0] == part) || (ip.ip_num[1] == part) ||
+			(ip.ip_num[2] == part) || (ip.ip_num[3] == part))
+			res.ip_pool.push_back(ip);
+	}
+	return res;
 };
 
 std::ostream& operator<<(std::ostream& os, const IP_Pool& pool)
