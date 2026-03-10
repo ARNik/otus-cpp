@@ -7,21 +7,17 @@
 struct IP {
 	IP(const std::string& ip_str);
 
-	std::string get_as_string() const;
-
 	uint32_t get_as_uint32() const;
 
 	std::array<uint8_t, 4> ip_num;
-};
 
-std::ostream& operator<<(std::ostream& os, const IP& ip);
+	friend std::ostream& operator<<(std::ostream& os, const IP& ip);
+};
 
 class IP_Pool
 {
 public:
 	void addIP(const std::string& ip_str);
-
-	std::string get_as_string() const;
 
 	void sort();
 
@@ -53,12 +49,9 @@ public:
 		IP_Pool res;
 		for (auto& ip : ip_pool) {
 			bool match = false;
-			for (auto& octet :octets)
-			{
-				for (int i = 0; i<4; ++i)
-				{
-					if (ip.ip_num[i] == octet)
-					{
+			for (auto& octet : octets) {
+				for (int i = 0; i < 4; ++i) {
+					if (ip.ip_num[i] == octet) {
 						match = true;
 						break;
 					}
@@ -70,8 +63,8 @@ public:
 		return res;
 	}
 
+	friend std::ostream& operator<<(std::ostream& os, const IP_Pool& ip);
+
 private:
 	std::vector<IP> ip_pool;
 };
-
-std::ostream& operator<<(std::ostream& os, const IP_Pool& ip);

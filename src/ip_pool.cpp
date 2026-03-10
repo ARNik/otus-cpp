@@ -1,5 +1,6 @@
 #include "ip_pool.h"
 #include <algorithm>
+#include <iostream>
 #include <stdexcept>
 
 // === IP ===
@@ -22,12 +23,6 @@ IP::IP(const std::string& ip_str)
 	}
 }
 
-std::string IP::get_as_string() const
-{
-	return std::to_string(ip_num[0]) + "." + std::to_string(ip_num[1]) + "." +
-		   std::to_string(ip_num[2]) + "." + std::to_string(ip_num[3]);
-}
-
 uint32_t IP::get_as_uint32() const
 {
 	return (static_cast<uint32_t>(ip_num[0]) << 24) |
@@ -38,22 +33,15 @@ uint32_t IP::get_as_uint32() const
 
 std::ostream& operator<<(std::ostream& os, const IP& ip)
 {
-	os << ip.get_as_string();
+	os << std::to_string(ip.ip_num[0]) + "." + std::to_string(ip.ip_num[1]) +
+			  "." + std::to_string(ip.ip_num[2]) + "." +
+			  std::to_string(ip.ip_num[3]);
 	return os;
 }
 
 // === IP_Pool ===
 
 void IP_Pool::addIP(const std::string& ip_str) { ip_pool.push_back(ip_str); }
-
-std::string IP_Pool::get_as_string() const
-{
-	std::string res;
-	for (auto& ip : ip_pool) {
-		res.append(ip.get_as_string() + '\n');
-	}
-	return res;
-}
 
 void IP_Pool::sort()
 {
@@ -64,6 +52,8 @@ void IP_Pool::sort()
 
 std::ostream& operator<<(std::ostream& os, const IP_Pool& pool)
 {
-	os << pool.get_as_string();
+	for (auto& ip : pool.ip_pool) {
+		os << ip << std::endl;
+	}
 	return os;
 }
