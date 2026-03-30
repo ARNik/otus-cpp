@@ -28,12 +28,13 @@ add_custom_target(
 )
 
 # Основные таргеты
-add_executable(ip_filter src/main.cpp src/ip_pool.cpp)
-add_dependencies(ip_filter GITVERSION)
-target_include_directories(ip_filter PRIVATE "${CMAKE_BINARY_DIR}")
+set(APP allocator)
+add_executable(${APP} src/main.cpp)
+add_dependencies(${APP} GITVERSION)
+target_include_directories(${APP} PRIVATE "${CMAKE_BINARY_DIR}")
 
 # Установка и пакетирование
-install(TARGETS ip_filter RUNTIME DESTINATION bin)
+install(TARGETS ${APP} RUNTIME DESTINATION bin)
 set(CPACK_GENERATOR DEB)
 set(CPACK_PACKAGE_VERSION "${PACKAGE_VERSION}")
 set(CPACK_PACKAGE_CONTACT arnik@arnik.ru)
@@ -53,7 +54,7 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-add_executable(tests tests/version.cpp tests/ip_pool.cpp src/ip_pool.cpp)
+add_executable(tests tests/version.cpp)
 add_dependencies(tests GITVERSION)
 target_include_directories(tests PRIVATE "${CMAKE_BINARY_DIR}")
 target_link_libraries(tests GTest::gtest_main)
